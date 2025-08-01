@@ -1,0 +1,59 @@
+services:
+  # server:
+  #   container_name: hono_server
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile
+  #   depends_on:
+  #     - postgres
+  #     - redis
+  #     - mongo
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "3000:3000"
+  #   restart: always
+  #   networks:
+  #     - app-network
+
+  postgres:
+    image: postgres
+    container_name: postgres_container
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # redis:
+  #   image: redis
+  #   container_name: redis_container
+  #   restart: unless-stopped
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+
+  # mongo:
+  #   image: mongo
+  #   container_name: mongo_container
+  #   restart: unless-stopped
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: mongo
+  #     MONGO_INITDB_ROOT_PASSWORD: mongo
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - mongo_data:/data/db
+
+volumes:
+  postgres_data:
+    driver: local
+  # redis_data:
+  #   driver: local
+  # mongo_data:
+  #   driver: local

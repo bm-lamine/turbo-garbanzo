@@ -8,7 +8,7 @@ export default class {
     return await jwt.sign(
       {
         sessionId,
-        exp: Math.floor(Date.now() / 1000) + authUtils.defaults.jwt.livespan,
+        exp: Math.floor(Date.now() / 1000) + authUtils.defaults.jwt.lifespan,
       },
       config.env.JWT_SECRET,
     );

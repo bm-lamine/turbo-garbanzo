@@ -1,7 +1,22 @@
-import * as pg_core from "drizzle-orm/pg-core";
+import * as pgCore from "drizzle-orm/pg-core";
 import { HTTPException } from "hono/http-exception";
 
-export const createTable = pg_core.pgTableCreator((name) => name);
+export const createTable = pgCore.pgTableCreator((name) => name);
+
+export const bytea = pgCore.customType<{
+  data: Uint8Array;
+  driverData: Buffer;
+}>({
+  dataType() {
+    return "bytea";
+  },
+  fromDriver(value: Buffer) {
+    return new Uint8Array(value);
+  },
+  toDriver(value: Uint8Array): Buffer {
+    return Buffer.from(value);
+  },
+});
 
 export const takeFirst = <T>(values: T[]): T | null => {
   if (values.length === 0) return null;
@@ -17,11 +32,11 @@ export const takeFirstOrThrow = <T>(values: T[]): T => {
 };
 
 export const timestamps = {
-  createdAt: pg_core
+  createdAt: pgCore
     .timestamp({ mode: "date", withTimezone: true })
     .$defaultFn(() => new Date())
     .notNull(),
-  updatedAt: pg_core
+  updatedAt: pgCore
     .timestamp({ mode: "date", withTimezone: true })
     .$onUpdateFn(() => new Date()),
 };

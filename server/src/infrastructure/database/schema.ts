@@ -8,6 +8,17 @@ export const userTable = createTable("users", (db) => ({
   ...timestamps,
 }));
 
+export const sessionTable = createTable("sessions", (db) => ({
+  id: db.varchar().$defaultFn(createId).primaryKey(),
+  userId: db
+    .varchar()
+    .references(() => userTable.id)
+    .notNull(),
+  expiresAt: db.timestamp({ mode: "date", withTimezone: true }).notNull(),
+  createdA: timestamps.createdAt,
+}));
+
 export const schema = {
   users: userTable,
+  sessions: sessionTable,
 } as const;
